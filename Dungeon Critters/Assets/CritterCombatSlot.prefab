@@ -71,8 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2064110086780631126, guid: ddb60620dd96fd748a9e806f24e75e1b,
-    type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -80,7 +79,7 @@ SpriteRenderer:
   m_Size: {x: 0.81, y: 0.71}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &7384797638123697413
@@ -92,9 +91,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 66378171878999150}
-  - component: {fileID: 6232792753115256992}
+  - component: {fileID: 603469196600468208}
   m_Layer: 0
-  m_Name: Critter
+  m_Name: CritterCombatSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +115,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6232792753115256992
+--- !u!114 &603469196600468208
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,15 +124,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7384797638123697413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1207577b213662a40b6e5a1ade767f2a, type: 3}
+  m_Script: {fileID: 11500000, guid: df4eb2268d03cc0418744d294324b374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
-  maxHealth: 0
-  attack: 0
-  speed: 0
-  enemy: 0
+  critter: {fileID: 0}
+  spriteRenderer: {fileID: 3333826224980628525}
   healthSlider: {fileID: 1538042700086254985}
+  enemyCritter: 0
 --- !u!1 &8650216130945963430
 GameObject:
   m_ObjectHideFlags: 0

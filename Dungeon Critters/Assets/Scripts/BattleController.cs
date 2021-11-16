@@ -1,18 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class BattleController : MonoBehaviour
 {
-    public List<CritterStats> critters = new List<CritterStats>();
-    public List<CritterStats> t1 = new List<CritterStats>();
-    public List<CritterStats> t2 = new List<CritterStats>();
+    public List<CritterCombatSlot> critters = new List<CritterCombatSlot>();
+    public List<CritterCombatSlot> t1 = new List<CritterCombatSlot>();
+    public List<CritterCombatSlot> t2 = new List<CritterCombatSlot>();
 
     void Start()
     {
-        foreach (CritterStats critter in critters)
+        foreach (CritterCombatSlot critter in critters)
         {
-            if (critter.enemy)
+            if (critter.enemyCritter)
             {
                 t2.Add(critter);
             }
@@ -23,44 +24,36 @@ public class BattleController : MonoBehaviour
 
             critter.onDeath.AddListener(RemoveCritter);
         }
-        print(t1.Count);
-        print(t2.Count);
-        StartCoroutine(FightRoutine());
+
     }
 
-    IEnumerator FightRoutine()
+    async void CombatTurn()
     {
         SortBySpeed();
-        foreach(CritterStats critter in critters)
+        foreach (CritterCombatSlot critter in critters)
         {
             if (critter.dead) { continue; }
-            if (!critter.enemy)
+            CritterCombatSlot target;
+            if (!critter.enemyCritter)
             {
                 if (t2.Count == 0) { break; }
-                CritterStats target = SelectTarget(t2);
-                critter.Attack(target);
+                target = SelectTarget(t2);
             }
             else
             {
                 if (t1.Count == 0) { break; }
-                CritterStats target = SelectTarget(t1);
-                critter.Attack(target);
+                target = SelectTarget(t1);
             }
-
-            yield return new WaitForSeconds(0.3f);
-        }
-        if (t1.Count > 0 && t2.Count > 0)
-        {
-            StartCoroutine(FightRoutine());
+            await critter.ai.Attack(critter, target);
         }
     }
 
     void SortBySpeed()
     {
-        critters.Sort((x, y) => y.speed - x.speed);
+        critters.Sort((x, y) => y.critter.speed - x.critter.speed);
     }
 
-    CritterStats SelectTarget(List<CritterStats> possibleTargets)
+    CritterCombatSlot SelectTarget(List<CritterCombatSlot> possibleTargets)
     {
         for (int i = 0; i < 20; i++)
         {
@@ -69,7 +62,7 @@ public class BattleController : MonoBehaviour
 
             if (i1 == i2) { continue; }
 
-            CritterStats temp = possibleTargets[i1];
+            CritterCombatSlot temp = possibleTargets[i1];
             possibleTargets[i1] = possibleTargets[i2];
             possibleTargets[i2] = temp;
         }
@@ -78,9 +71,9 @@ public class BattleController : MonoBehaviour
     }
 
 
-    void RemoveCritter(CritterStats critter)
+    void RemoveCritter(CritterCombatSlot critter)
     {
-        if (critter.enemy)
+        if (critter.enemyCritter)
         {
             t2.Remove(critter);
         }
@@ -88,5 +81,10 @@ public class BattleController : MonoBehaviour
         {
             t1.Remove(critter);
         }
+    }
+
+    private void OnMouseDown()
+    {
+        CombatTurn();
     }
 }
